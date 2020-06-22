@@ -1,2 +1,2 @@
-# Minnie-
+# Minnie
 Content Management System
