@@ -56,7 +56,7 @@ class ArticleController extends AbstractBaseApiController {
         /** @var Article $object */
         $object->setAuthor($this->getUserT());
         /** @var Slugger $slugger */
-        $slugger = $this->get(Slugger::class);
+        $slugger = $this->get("slug");
         $object->setSlug($slugger->slugify($object->getTitle()));
     }
     /**
@@ -107,5 +107,18 @@ class ArticleController extends AbstractBaseApiController {
     public function deleteAction(int $id) //: View
     {
         return $this->deleteEntity($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public static function getSubscribedServices()
+    {
+        $subscribedServices = parent::getSubscribedServices();
+        $subscribedServices['slug'] = Slugger::class;
+
+        return $subscribedServices;
     }
 }

@@ -60,7 +60,6 @@ class ArticleType extends AbstractType
             ])
             ->add('category', EntityType::class, array(
                 'label' => 'label.category',
-                // looks for choices from this entity
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'choice_name' => 'name',
