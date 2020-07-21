@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityNotFoundException;
 //use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
-
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use App\Entity\Category;
 use App\Form\CategoryType;
 /**
@@ -123,6 +123,8 @@ abstract class AbstractBaseApiController extends AbstractFOSRestController imple
         $entities = $repository->findAll();
 
         $view = $this->view($entities, Response::HTTP_OK);
+        $view->getContext()->addGroup('normal');
+        // $view->getContext()->setAttribute(AbstractNormalizer::IGNORED_ATTRIBUTES,['children','articles','password']);
         return $this->handleView($view);
     }
 

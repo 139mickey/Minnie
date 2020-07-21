@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -39,6 +40,8 @@ class User implements UserInterface, \Serializable
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"normal"})
      */
     private $id;
 
@@ -46,6 +49,8 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(type="string")
+     *
+     * @Groups({"normal"})
      */
     private $fullName;
 
@@ -53,6 +58,8 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(type="string", unique=true)
+     *
+     * @Groups({"normal"})
      */
     private $username;
 
@@ -60,6 +67,7 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(type="string", unique=true)
+     *
      */
     private $email;
 
@@ -85,6 +93,7 @@ class User implements UserInterface, \Serializable
      * @ORM\JoinTable(name="sys_user_group",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")})
+     *
      */
     protected $groups;
 
@@ -95,6 +104,9 @@ class User implements UserInterface, \Serializable
         $this->roles = array();
     }
 
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -108,11 +120,17 @@ class User implements UserInterface, \Serializable
         $this->fullName = $fullName;
     }
 
+    /**
+     * @return string
+     */
     public function getFullName()
     {
         return $this->fullName;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         return $this->username;
@@ -126,6 +144,9 @@ class User implements UserInterface, \Serializable
         $this->username = $username;
     }
 
+    /**
+     * @return string
+     */
     public function getEmail()
     {
         return $this->email;
@@ -139,6 +160,9 @@ class User implements UserInterface, \Serializable
         $this->email = $email;
     }
 
+    /**
+     * @return string
+     */
     public function getPassword()
     {
         return $this->password;
@@ -240,7 +264,7 @@ class User implements UserInterface, \Serializable
     /**
      * Gets the groups granted to the user.
      *
-     * @return Collection
+     * @return ArrayCollection
      */
     public function getGroups()
     {

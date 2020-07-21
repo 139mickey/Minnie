@@ -18,9 +18,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
+ * @ORM\Entity
  * @ORM\Table(name="cms_article")
  *
  * Defines the properties of the Article entity to represent the blog articles.
@@ -31,6 +32,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * See https://symfony.com/doc/current/cookbook/doctrine/reverse_engineering.html
  *
  * @author zhangbing <550695@qq.com>
+ *
+ *
  */
 class Article
 {
@@ -48,6 +51,8 @@ class Article
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"normal"})
      */
     private $id;
 
@@ -56,6 +61,8 @@ class Article
      *
      * @ORM\Column(type="string")
      * @Assert\NotBlank
+     *
+     * @Groups({"normal"})
      */
     private $title;
 
@@ -63,6 +70,8 @@ class Article
      * @var string
      *
      * @ORM\Column(type="string")
+     *
+     * @Groups({"normal"})
      */
     private $slug;
 
@@ -72,6 +81,8 @@ class Article
      * @ORM\Column(type="string")
      * @Assert\NotBlank(message="article.blank_summary")
      * @Assert\Length(max=255)
+     *
+     * @Groups({"normal"})
      */
     private $summary;
 
@@ -81,6 +92,8 @@ class Article
      * @ORM\Column(type="text")
      * @Assert\NotBlank(message="article.blank_content")
      * @Assert\Length(min=10, minMessage="article.too_short_content")
+     *
+     * @Groups({"normal"})
      */
     private $content;
 
@@ -89,6 +102,8 @@ class Article
      *
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
+     *
+     * @Groups({"normal"})
      */
     private $publishedAt;
 
@@ -97,6 +112,8 @@ class Article
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Groups({"normal"})
      */
     private $author;
 
@@ -109,6 +126,8 @@ class Article
      *      orphanRemoval=true
      * )
      * @ORM\OrderBy({"publishedAt": "DESC"})
+     *
+     * @Groups({"normal"})
      */
     private $comments;
 
@@ -119,14 +138,18 @@ class Article
      * @ORM\JoinTable(name="cms_article_tag")
      * @ORM\OrderBy({"name": "ASC"})
      * @Assert\Count(max="4", maxMessage="article.too_many_tags")
+     *
+     * @Groups({"normal"})
      */
     private $tags;
 
     /**
      * @var Category
-     *
+     * @MaxDepth(1)
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="articles")
      * @ORM\JoinColumn(nullable=true)
+     *
+     * @Groups({"normal"})
      */
     private $category;
 
@@ -135,6 +158,8 @@ class Article
      *
      * @ORM\Column(type="string",nullable=true )
      * @Assert\Length(max=255)
+     *
+     * @Groups({"normal"})
      */
     private $coverImage;
 
@@ -143,6 +168,8 @@ class Article
      * @var boolean | null
      *
      * @ORM\Column(type="boolean",nullable=true )
+     *
+     * @Groups({"normal"})
      */
     private $frontPage;
 
@@ -150,6 +177,8 @@ class Article
      * @var int|null
      *
      * @ORM\Column(type="integer", nullable = true)
+     *
+     * @Groups({"normal"})
      */
     private $count;
 
@@ -208,7 +237,7 @@ class Article
 
     public function getPublishedAt()
     {
-        return $this->publishedAt;
+        return $this->publishedAt->format('Y-m-d H:i:s');
     }
 
     public function setPublishedAt(\DateTime $publishedAt)

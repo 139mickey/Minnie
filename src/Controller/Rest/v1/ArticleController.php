@@ -17,6 +17,9 @@ use Doctrine\ORM\EntityNotFoundException;
 //use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Context\Context;
+
+
 
 use App\Utils\Slugger;
 use App\Entity\Article;
@@ -59,6 +62,7 @@ class ArticleController extends AbstractBaseApiController {
         $slugger = $this->get("slug");
         $object->setSlug($slugger->slugify($object->getTitle()));
     }
+
     /**
      * Create Entity object.
      * @Rest\Post("/articles")
@@ -121,4 +125,18 @@ class ArticleController extends AbstractBaseApiController {
 
         return $subscribedServices;
     }
+
+
+    /**
+     *
+     */
+    public function getViewContext()
+    {
+        $context = new Context();
+        $context->setVersion('1.0');
+        $context->addGroup('user');
+//        $view->setContext($context);
+        return $context;
+    }
+
 }

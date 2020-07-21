@@ -18,7 +18,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
@@ -39,11 +40,15 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"normal"})
      */
     private $id;
 
     /**
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
+     *
+     * @Groups({"normal"})
      */
     private $children;
 
@@ -52,6 +57,8 @@ class Category
      *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     *
+     * @Groups({"normal"})
      */
     private $parent;
 
@@ -60,12 +67,14 @@ class Category
      * @var string
      *
      * @ORM\Column(type="string", unique=true)
+     *
+     * @Groups({"normal"})
      */
     private $name;
 
     /**
      * @var Article[]|ArrayCollection
-     *
+     * @MaxDepth(2)
      * @ORM\OneToMany(
      *      targetEntity="Article",
      *      mappedBy="category",
@@ -81,6 +90,8 @@ class Category
      * @ORM\OneToOne(targetEntity="Article")
      * @ORM\JoinColumn(name="front_page_id", referencedColumnName="id", nullable=true)
      *
+     * @Groups({"normal"})
+     *
      */
     private $frontPage;
 
@@ -88,6 +99,8 @@ class Category
      * @var string | null
      *
      * @ORM\Column(type="text", nullable=true)
+     *
+     * @Groups({"normal"})
      */
     private $description;
 
@@ -95,6 +108,8 @@ class Category
      * @var int | null
 
      * @ORM\Column(type="integer", nullable=true, options={"default" : 0})
+     *
+     * @Groups({"normal"})
      */
     private $sort = 0;
 
@@ -185,7 +200,7 @@ class Category
      * @param int $count
      * @return Collection
      */
-    public function getPosts($count = -1)
+    public function getArticles($count = -1)
     {
         $posts = null;
         $now = new \DateTime();
@@ -209,7 +224,7 @@ class Category
         return $posts;
     }
 
-    public function addPost(Article $post)
+    public function addArticle(Article $post)
     {
         $post->setCategory($this);
         if (!$this->articles->contains($post)) {
@@ -217,7 +232,7 @@ class Category
         }
     }
 
-    public function removePost(Article $post)
+    public function removeArticle(Article $post)
     {
         $post->setCategory(null);
         $this->articles->removeElement($post);
