@@ -19,8 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Context\Context;
 
-
-
 use App\Utils\Slugger;
 use App\Entity\Article;
 use App\Form\ArticleType;
@@ -36,6 +34,13 @@ class ArticleController extends AbstractBaseApiController {
     {
         $this->setEntityClass(Article::class);
         $this->setEntityFromTypeClass(ArticleType::class);
+    }
+
+    /**
+     * @param View $view
+     */
+    public function needContextGroup(View $view){
+        $view->getContext()->addGroup('normal');
     }
 
     /**

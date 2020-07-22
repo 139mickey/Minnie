@@ -113,6 +113,13 @@ abstract class AbstractBaseApiController extends AbstractFOSRestController imple
     }
 
     /**
+     * @param View $view
+     */
+    public function needContextGroup(View $view){
+
+    }
+
+    /**
      * get a Lists of all category Objects.
      *
      * @return Response
@@ -123,7 +130,8 @@ abstract class AbstractBaseApiController extends AbstractFOSRestController imple
         $entities = $repository->findAll();
 
         $view = $this->view($entities, Response::HTTP_OK);
-        $view->getContext()->addGroup('normal');
+        $this->needContextGroup($view);
+        // $view->getContext()->addGroup('normal');
         // $view->getContext()->setAttribute(AbstractNormalizer::IGNORED_ATTRIBUTES,['children','articles','password']);
         return $this->handleView($view);
     }

@@ -10,6 +10,7 @@
 namespace App\Controller\Rest\v1;
 
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\View\View;
 
 /**
  *
@@ -76,4 +77,9 @@ interface AbstractBaseApiControllerInterface
      * @return static
      */
     public function deleteEntity(int $id);
+
+    /**
+     * @param View $view
+     */
+    public function needContextGroup(View $view);
 }
