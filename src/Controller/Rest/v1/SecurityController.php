@@ -29,8 +29,13 @@ class SecurityController extends AbstractFOSRestController
      */
     public function logout(Request $request)
     {
-        $msg = "logout success!";
-        $view = $this->view($msg, Response::HTTP_OK);
+        $statusCode = Response::HTTP_OK;
+        $viewData = [
+            "data" => "success",
+            "message" => "success",
+            //"status" => "ok"
+        ];
+        $view = $this->view($viewData, $statusCode);
         return $this->handleView($view);
     }
 }

@@ -81,5 +81,7 @@ interface AbstractBaseApiControllerInterface
     /**
      * @param View $view
      */
-    public function needContextGroup(View $view);
+    public function SetSerializationContext(View $view);
+
+    public function entityPrePersistOnAction($object);
 }

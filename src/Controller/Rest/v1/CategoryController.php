@@ -16,7 +16,8 @@ use Doctrine\ORM\EntityNotFoundException;
 //use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
-
+use FOS\RestBundle\Context\Context;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use App\Entity\Category;
 use App\Form\CategoryType;
 /**
@@ -32,6 +33,28 @@ class CategoryController extends AbstractBaseApiController {
         $this->setEntityClass(Category::class);
         $this->setEntityFromTypeClass(CategoryType::class);
     }
+
+    /**
+     * @param View $view
+     */
+    public function SetSerializationContext(View $view){
+        $serializationContext = $view->getContext();
+        $serializationContext->addGroups(['normal','articles']);
+        // $view->getContext()->addGroup('normal');
+        // $view->getContext()->setAttribute(AbstractNormalizer::IGNORED_ATTRIBUTES,['children','articles','password']);
+
+        // all callback parameters are optional (you can omit the ones you don't use)
+        $dateTimeToString = function ($dateTime) {
+            return $dateTime instanceof \DateTime ? $dateTime->format(\DateTime::ISO8601) : '';
+        };
+
+        $callBacks = [
+            'publishedAt' => $dateTimeToString,
+        ];
+
+        $serializationContext->setAttribute( AbstractNormalizer::CALLBACKS, $callBacks);
+    }
+
 
     /**
      * get a Lists of all category Objects.
@@ -92,22 +115,6 @@ class CategoryController extends AbstractBaseApiController {
      */
     public function deleteAction(int $id) //: View
     {
-/*
-        $repository = $this->getDoctrine()->getRepository(Category::class);
-        $object = $repository->findOneById($id);
-
-        if (!$object) {
-            throw new EntityNotFoundException('Category with id '.$id.' does not exist!');
-        }
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($object);
-        $em->flush();
-
-        // In case our DELETE was a success we need to return a 204 HTTP NO CONTENT response. The object is deleted.
-        $view = $this->view([], Response::HTTP_NO_CONTENT);
-        return $this->handleView($view);
-*/
-
         return $this->deleteEntity($id);
     }
 }

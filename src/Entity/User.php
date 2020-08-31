@@ -68,6 +68,7 @@ class User implements UserInterface, \Serializable
      *
      * @ORM\Column(type="string", unique=true)
      *
+     * @Groups({"normal"})
      */
     private $email;
 
@@ -82,6 +83,8 @@ class User implements UserInterface, \Serializable
      * @var array
      *
      * @ORM\Column(type="json_array")
+     *
+     * @Groups({"normal"})
      */
     private $roles = [];
 
@@ -94,6 +97,7 @@ class User implements UserInterface, \Serializable
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")})
      *
+     * @Groups({"normal"})
      */
     protected $groups;
 

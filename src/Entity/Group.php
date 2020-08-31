@@ -16,7 +16,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity
  * @ORM\Table(name="sys_group")
@@ -28,6 +28,7 @@ class Group implements GroupInterface
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"normal"})
      */
     protected $id;
 
@@ -35,6 +36,7 @@ class Group implements GroupInterface
      * @var string
      *
      * @ORM\Column(type="string")
+     * @Groups({"normal"})
      */
     protected $name;
 
@@ -42,6 +44,7 @@ class Group implements GroupInterface
      *
      * @var string
      * @ORM\Column(type="text",nullable=true)
+     * @Groups({"normal"})
      */
     private $description;
 
@@ -54,6 +57,7 @@ class Group implements GroupInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="groups")
+     * @Groups({"normal"})
      */
     private $users;
 

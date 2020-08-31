@@ -81,6 +81,8 @@ class Category
      *      orphanRemoval=true,
      *      cascade={"persist"}
      * )
+     *
+     * @Groups({"articles"})
      */
     private $articles;
 

@@ -25,4 +25,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+    /*
+    public function loadUserByUsername($usernameOrEmail)
+    {
+        return $this->createQuery(
+            'SELECT u
+            FROM App\Entity\User u
+            WHERE u.username = :query
+            OR u.email = :query'
+        )
+            ->setParameter('query', $usernameOrEmail)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+    */
 }

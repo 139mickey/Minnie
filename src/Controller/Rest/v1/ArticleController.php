@@ -1,10 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 20-4-29
- * Time: 下午8:06
- */
+/*
+* This file is part of the Minnie package.
+*
+* (c) ZhangBing <550695@qq.com>
+*
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
 
 namespace App\Controller\Rest\v1;
 
@@ -18,7 +21,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Context\Context;
-
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use App\Utils\Slugger;
 use App\Entity\Article;
 use App\Form\ArticleType;
@@ -39,8 +42,22 @@ class ArticleController extends AbstractBaseApiController {
     /**
      * @param View $view
      */
-    public function needContextGroup(View $view){
-        $view->getContext()->addGroup('normal');
+    public function SetSerializationContext(View $view){
+        $serializationContext = $view->getContext();
+        $serializationContext->addGroup('normal');
+        // $view->getContext()->addGroup('normal');
+        // $view->getContext()->setAttribute(AbstractNormalizer::IGNORED_ATTRIBUTES,['children','articles','password']);
+
+        // all callback parameters are optional (you can omit the ones you don't use)
+        $dateTimeToString = function ($dateTime) {
+            return $dateTime instanceof \DateTime ? $dateTime->format(\DateTime::ISO8601) : '';
+        };
+
+        $callBacks = [
+            'publishedAt' => $dateTimeToString,
+        ];
+
+        $serializationContext->setAttribute( AbstractNormalizer::CALLBACKS, $callBacks);
     }
 
     /**
@@ -60,7 +77,7 @@ class ArticleController extends AbstractBaseApiController {
         return $user;
     }
 
-    public function entityPrePersistOnPostAction($object){
+    public function entityPrePersistOnAction($object){
         /** @var Article $object */
         $object->setAuthor($this->getUserT());
         /** @var Slugger $slugger */
@@ -130,18 +147,4 @@ class ArticleController extends AbstractBaseApiController {
 
         return $subscribedServices;
     }
-
-
-    /**
-     *
-     */
-    public function getViewContext()
-    {
-        $context = new Context();
-        $context->setVersion('1.0');
-        $context->addGroup('user');
-//        $view->setContext($context);
-        return $context;
-    }
-
 }

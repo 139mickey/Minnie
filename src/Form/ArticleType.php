@@ -28,6 +28,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\CallbackTransformer;
+
 /**
  * Defines the form used to create and manipulate blog posts.
  *
@@ -76,7 +78,11 @@ class ArticleType extends AbstractType
             ->add('publishedAt', DateTimeType::class, [
                 'label' => 'label.published_at',
                 'widget' => 'single_text',
-                'input_format'=>'Y-m-d H:i:s'
+                //'input'=>'string',
+                // 'format'=>'Y-m-d H:i:s',
+                //'input_format' => 'yyyy-MM-dd\'T\'HH:mm:ssZZZZZ',
+               // 'format' => 'yyyy-MM-dd\'T\'HH:mm:ssZZZZZ',
+                'html5'=>false
             ])
             /*
             ->add('tags', TagsInputType::class, [
@@ -108,6 +114,25 @@ class ArticleType extends AbstractType
                 'required' => false,
             ))
         ;
+/*
+        $builder->get('publishedAt')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($datetimeToString) {
+                    // transform “model data” => “norm data”
+                    $format = "Y-m-d H:i:s";
+                    $datetime = \DateTime::createFromFormat($format,$datetimeToString );
+                    //$strDateTime = $datetimeToString->format("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
+                    return $datetime;//implode(', ', $tagsAsArray);
+                },
+                function ($stringToDatetime) {
+                    // transform “norm data” => “model data”
+                    $format = "Y-m-d H:i:s";
+                    $datetime = \DateTime::createFromFormat($format,$stringToDatetime );
+                    return $datetime;//explode(', ', $tagsAsString);
+                }
+            ))
+        ;
+*/
     }
 
     /**

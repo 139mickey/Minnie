@@ -18,6 +18,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -53,7 +54,7 @@ class UserType extends AbstractType
         //     $builder->add('title', null, array('required' => false, ...));
 
         $builder
-
+            //->add('id', HiddenType::class)
             ->add('fullName', TextType::class, array(
                 'attr' => array('autofocus' => true),
                 'label' => 'label.fullName',
@@ -65,24 +66,13 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, array(
                 'label' => 'label.email',
             ))
-            /*
-            ->add('img', 'file',
-                array(
-                    'image_path' => 'Img',
-                    'attr' => array('rel' => "file_manager"),
-                    'label' => 'label.image',
-                    //"mapped"=>false,
-                    "data_class"=>null,
-                    "required"=>false,
-                ))
-*/
             ->add('password', RepeatedType::class, array(
             		'type' => PasswordType::class,
             		'invalid_message' => 'The password fields must match.',
             		'options' => array('attr' => array('class' => 'password-field')),
-            		'required' => false,
-            		'first_options'  => array('label' => 'label.password'),
-            		'second_options' => array('label' => 'label.repeat_password'),
+                    'first_options'  => array('label' => 'label.password'),
+                    'second_options' => array('label' => 'label.repeat_password'),
+            		'required' => false
             ))
             ->add("groups", EntityType::class,
                         array(
@@ -178,6 +168,7 @@ class UserType extends AbstractType
         $resolver->setDefaults(array(
             'groupsOfSys' => array(),
             'data_class' => 'App\Entity\User',
+            'csrf_protection' => false
         ));
 
         $allowedTypes = array(

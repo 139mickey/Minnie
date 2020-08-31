@@ -237,7 +237,7 @@ class Article
 
     public function getPublishedAt()
     {
-        return $this->publishedAt->format('Y-m-d H:i:s');
+        return $this->publishedAt;//->format('Y-m-d H:i:s');
     }
 
     public function setPublishedAt(\DateTime $publishedAt)
